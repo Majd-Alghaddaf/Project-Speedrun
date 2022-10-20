@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Configuration")]
@@ -11,11 +12,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject frontGameObject;
     [SerializeField] private AudioSource movementAudioSource;
     [Header("Movement")]
-    [SerializeField] private string horizontalAxisName = "Horizontal";
     [SerializeField] private string runningAnimationBoolName = "isRunning";
     [SerializeField] [Range(0f, 25f)] private float moveSpeed;
     [Header("Jumping")]
-    [SerializeField] private string jumpButtonName = "Jump";
     [SerializeField] private string jumpingAnimationBoolName = "isJumping";
     [SerializeField] [Range(0f,50f)] private float jumpForce;
     [SerializeField] [Range(0f, 50f)] private float longJumpForce;
@@ -27,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0f, 2f)] private float wallJumpHorizontalLockDuration = 0.1f;
     [SerializeField] [Range(0.1f, 5f)] private float longJumpForceDividerWhenSliding = 2f;
     [Header("Dashing")]
-    [SerializeField] private string dashButtonName = "Fire1";
     [SerializeField] [Range(0f, 50f)] private float dashForceValue = 0f;
     [SerializeField] [Range(0f, 5f)] private float dashDuration = 1f;
     [SerializeField] [Range(0f, 3f)] private float timeBetweenDashes = 0.5f;
@@ -40,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
+    private PlayerInput _playerInput;
 
     private float _horizontalInput = 0f;
     private bool _lockHorizontalMovement = false;
@@ -51,15 +50,17 @@ public class PlayerMovement : MonoBehaviour
     private bool _canDoubleJump = true;
     private bool _canDash = true;
 
-    private void Start()
+    private void Awake()
     {
+        Application.targetFrameRate = -1;
+        _playerInput = GetComponent<PlayerInput>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
-        _horizontalInput = Input.GetAxisRaw(horizontalAxisName);
+        _horizontalInput = _playerInput.GetMovementInput();
 
         HandleRun();
         HandleJump();
@@ -104,15 +105,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (_isGrounded && Input.GetButtonDown(jumpButtonName))
+        if (_isGrounded && _playerInput.GetJumpPressedInput())
         {
             Jump();
         }
-        else if(_isWallSliding && _canWallJump && Input.GetButtonDown(jumpButtonName))
+        else if(_isWallSliding && _canWallJump && _playerInput.GetJumpPressedInput())
         {
             WallJump();
         }
-        else if(!_isGrounded && !_isWallSliding && _canDoubleJump && Input.GetButtonDown(jumpButtonName))
+        else if(!_isGrounded && !_isWallSliding && _canDoubleJump && _playerInput.GetJumpPressedInput())
         {
             DoubleJump();
         }
@@ -205,16 +206,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLongJump()
     {
-        if (!_isGrounded && Input.GetButton(jumpButtonName))
+        if (!_isGrounded && _playerInput.GetJumpHoldInput())
         {
-            float force = _isWallSliding ? longJumpForce / longJumpForceDividerWhenSliding : longJumpForce; //to prevent player from spamming long jump on wall to get up
+             float force = _isWallSliding ? longJumpForce / longJumpForceDividerWhenSliding : longJumpForce; //to prevent player from spamming long jump on wall to get up
             _rigidbody.AddForce(new Vector2(0f, force), ForceMode2D.Force);
         }
     }
 
     private void HandleDash()
     {
-        if (Input.GetButtonDown(dashButtonName) && _horizontalInput != 0 && _canDash)
+        if (_playerInput.GetDashInput() && _horizontalInput != 0 && _canDash)
         {
             Dash();
             _playerAudio.PlayOneShotRandomAudioClipFromArrayFromMainSource(dashAudioClips, dashVolumeScale);

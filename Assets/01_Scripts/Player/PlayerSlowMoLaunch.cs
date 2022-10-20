@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerSlowMoLaunch : MonoBehaviour
 {
     public bool canSlowMo { get; set; }
@@ -41,15 +42,22 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float slowMoVolumeScale = 1f;
     [SerializeField] private AudioSource slowMoAudioSource;
 
+    private PlayerInput _playerInput;
+
     private bool _hasEnteredSlowMo = false;
     private float _initialLaunchChargeTime = 0f;
     private float _currentLaunchChargeTime = 0f;
 
+    private void Awake()
+    {
+        _playerInput = GetComponent<PlayerInput>();
+    }
+
     private void Update()
     {
-        if(canSlowMo)
+        if (canSlowMo)
         {
-            if(Input.GetKey(KeyCode.Mouse1) && _currentLaunchChargeTime < maxLaunchChargeTime && nearbySlowMoObject.CanBeUsedToLaunch())
+            if (_playerInput.GetSlowMoLaunchHoldInput() && _currentLaunchChargeTime < maxLaunchChargeTime && nearbySlowMoObject.CanBeUsedToLaunch())
             {
                 if (_hasEnteredSlowMo == false)
                 {
@@ -102,8 +110,18 @@ public class PlayerSlowMoLaunch : MonoBehaviour
 
     private void UpdateArrowParentRotation()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
+        Vector2 direction;
+        if (_playerInput.KeyboardAndMouseEnabled)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(_playerInput.GetMousePosition());
+            direction = (mousePosition - (Vector2)transform.position).normalized;
+        }
+        else
+        {
+            direction = _playerInput.GetLeftJoystickDirection();
+            if(direction == Vector2.zero) { return; } // so that the direction doesn't reset to Vector2.right if the player lets go of the joystick
+        }
+
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         arrowParentGameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
@@ -115,7 +133,6 @@ public class PlayerSlowMoLaunch : MonoBehaviour
         
         Vector2 arrowUpdatedPosition = new Vector2(((arrowMaxXPosition.x - arrowInitialXPosition.x) * chargePercentage) + arrowInitialXPosition.x, 0f);
         arrowChildGameObject.transform.localPosition = arrowUpdatedPosition;
-        //arrowChildGameObject.transform.localPosition = Vector2.Lerp((Vector2)arrowChildGameObject.transform.localPosition, arrowMaxXPosition, arrowXIncrementValue);
     }
 
     private void HandleLaunch()
@@ -136,8 +153,17 @@ public class PlayerSlowMoLaunch : MonoBehaviour
         float calculatedLaunchForceValue = baseLaunchForceValue + (((maxLaunchForceValue - baseLaunchForceValue) / maxLaunchChargeTime) * _currentLaunchChargeTime);
         Vector2 amplifiedLaunchForceVector = new Vector2(calculatedLaunchForceValue * xLaunchForceMultiplier, calculatedLaunchForceValue * yLaunchForceMultiplier);
 
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 launchDirection = (mousePosition - (Vector2)transform.position).normalized;
+        Vector2 launchDirection;
+        if(_playerInput.KeyboardAndMouseEnabled)
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(_playerInput.GetMousePosition());
+            launchDirection = (mousePosition - (Vector2)transform.position).normalized;
+        }
+        else
+        {
+            launchDirection = _playerInput.GetLeftJoystickDirection();
+            if (launchDirection == Vector2.zero) { return; } // so that the direction doesn't reset to Vector2.right if the player lets go of the joystick
+        }
 
         Vector2 finalLaunchForceVector = launchDirection.normalized * amplifiedLaunchForceVector;
         GetComponent<PlayerMovement>().Launch(finalLaunchForceVector, horizontalMovementLockDurationAfterLaunch);
