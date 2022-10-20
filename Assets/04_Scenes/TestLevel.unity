@@ -6460,10 +6460,6 @@ PrefabInstance:
       propertyPath: arrowParentGameObject
       value: 
       objectReference: {fileID: 1644499579}
-    - target: {fileID: 1740607404906885618, guid: 877e4d29be924044c924ddac86788e40, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.027
-      objectReference: {fileID: 0}
     - target: {fileID: 1740607405117450150, guid: 877e4d29be924044c924ddac86788e40, type: 3}
       propertyPath: m_Name
       value: Player

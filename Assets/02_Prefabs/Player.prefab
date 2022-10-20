@@ -514,7 +514,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1740607404906885617}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.027, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -751,22 +751,19 @@ MonoBehaviour:
   playerModelGameObject: {fileID: 1740607404906885617}
   frontGameObject: {fileID: 1412789478}
   movementAudioSource: {fileID: 0}
-  horizontalAxisName: Horizontal
   runningAnimationBoolName: isRunning
   moveSpeed: 7
-  jumpButtonName: Jump
   jumpingAnimationBoolName: isJumping
   jumpForce: 11
-  longJumpForce: 25
+  longJumpForce: 24
   wallSlidingSpeed: 5
   wallStickDuration: 0.2
   wallJumpForce: {x: 4, y: 12}
   timeBetweenWallJumps: 0.3
   wallJumpHorizontalLockDuration: 0.2
   longJumpForceDividerWhenSliding: 1.8
-  dashButtonName: Fire1
-  dashForceValue: 30
-  dashDuration: 0.1
+  dashForceValue: 35
+  dashDuration: 0.12
   timeBetweenDashes: 1
   _playerAudio: {fileID: 1627598886}
   dashAudioClips:
@@ -820,3 +817,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f781787e49c3644d932f5ee0022918e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeyboardAndMouseEnabled: 1

@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = -1;
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
@@ -61,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         _horizontalInput = _playerInput.GetMovementInput();
+        _horizontalInput = Mathf.Round(_horizontalInput);
 
         HandleRun();
         HandleJump();
