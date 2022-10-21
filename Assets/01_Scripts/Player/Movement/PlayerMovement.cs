@@ -65,10 +65,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         _horizontalInput = _playerInput.GetMovementInput();
-        //_horizontalInput = Mathf.Round(_horizontalInput);
-        if (_horizontalInput > 0) _horizontalInput = 1;
-        else if (_horizontalInput < 0) _horizontalInput = -1;
-        else _horizontalInput = 0;
+        RoundHorizontalInput();
 
         HandleRun();
         HandleJump();
@@ -79,6 +76,15 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     { 
         HandleLongJump();
+    }
+    private void RoundHorizontalInput()
+    {
+        if (_horizontalInput > 0) 
+            _horizontalInput = 1;
+        else if (_horizontalInput < 0) 
+            _horizontalInput = -1;
+        else 
+            _horizontalInput = 0;
     }
 
     private void HandleRun()
@@ -92,21 +98,21 @@ public class PlayerMovement : MonoBehaviour
             _rigidbody.velocity = new Vector2(_horizontalInput * moveSpeed, _rigidbody.velocity.y);
         }
 
-        SetRunningAnimation();
+        UpdateRunningAnimation();
     }
 
-    private void SetRunningAnimation()
+    private void UpdateRunningAnimation()
     {
         bool isRunning = Mathf.Abs(_rigidbody.velocity.x) > Mathf.Epsilon;
         _animator.SetBool(runningAnimationBoolName, isRunning);
 
         if(isRunning)
         {
-            SetSpriteFlip();
+            UpdateSpriteFlipRotation();
         }
     }
     
-    private void SetSpriteFlip()
+    private void UpdateSpriteFlipRotation()
     {
         playerModelGameObject.transform.localScale = new Vector2(Mathf.Sign(_rigidbody.velocity.x), 1f);
     }
@@ -147,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
         InterruptLongJumpLock();
         _canLongJump = true;
 
-        SetSpriteFlip();
+        UpdateSpriteFlipRotation();
         StartCoroutine(LockWallJumping());
     }
 

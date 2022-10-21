@@ -7,7 +7,7 @@ using UnityEngine;
 
     private PlayerMovement _playerMovement;
 
-    private void Start()
+    private void Awake()
     {
         _playerMovement = GetComponentInParent<PlayerMovement>();
     }

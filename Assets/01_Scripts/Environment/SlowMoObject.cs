@@ -8,7 +8,7 @@ public class SlowMoObject : MonoBehaviour
     private CircleCollider2D _slowMoCollider;
     private bool _canBeUsedToLaunch = true;
 
-    private void Start()
+    private void Awake()
     {
         _slowMoCollider = GetComponent<CircleCollider2D>();
 

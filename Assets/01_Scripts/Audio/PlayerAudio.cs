@@ -7,7 +7,7 @@ public class PlayerAudio : MonoBehaviour
 {
     private AudioSource _mainAudioSource;
 
-    private void Start()
+    private void Awake()
     {
         _mainAudioSource = GetComponent<AudioSource>();
     }

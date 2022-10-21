@@ -65,7 +65,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
             {
                 if (_hasEnteredSlowMo == false)
                 {
-                    // code below is called once at the beginning of the launch
+                    // called once at the beginning of the launch
                     _initialLaunchChargeTime = Time.time;
                     _playerMovement.InterruptHorizontalMovementLock(); // incase the player chained two launches back to back, causing interference in the lock
 
@@ -179,7 +179,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
         _playerMovement.Launch(finalLaunchForceVector, horizontalMovementLockDurationAfterLaunch);
     }
 
-    private static void ResetTimeScale()
+    private void ResetTimeScale()
     {
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;

@@ -8,7 +8,7 @@ public class GroundChecker : MonoBehaviour
 
     private PlayerMovement _playerMovement;
 
-    private void Start()
+    private void Awake()
     {
         _playerMovement = GetComponentInParent<PlayerMovement>();
     }
