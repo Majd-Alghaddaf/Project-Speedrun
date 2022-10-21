@@ -16,6 +16,8 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     [Header("Charging")]
     [Tooltip("The maximum amount of time the player can hold the charge button to launch afterwards")]
     [SerializeField] [Range(0.5f, 5f)] float maxLaunchChargeTime = 2f;
+    [Tooltip("The time it takes to reach the maximum launch force value")]
+    [SerializeField] [Range(0.5f, 5f)] float timeToReachMaxLaunchForceValue = 2f;
     [Tooltip("The time to be waited between two consecutive charges")]
     [SerializeField] [Range(0f, 3f)] float launchChargeCooldown = 1f;
 
@@ -57,7 +59,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     {
         if (canSlowMo)
         {
-            if (_playerInput.GetSlowMoLaunchHoldInput() && _currentLaunchChargeTime < maxLaunchChargeTime && nearbySlowMoObject.CanBeUsedToLaunch())
+            if (_playerInput.GetSlowMoLaunchHoldInput() && _currentLaunchChargeTime < timeToReachMaxLaunchForceValue && nearbySlowMoObject.CanBeUsedToLaunch())
             {
                 if (_hasEnteredSlowMo == false)
                 {
@@ -70,6 +72,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
                 SlowDownTime();
 
                 _currentLaunchChargeTime = (Time.time - _initialLaunchChargeTime) * (1 / timeScaleValue);
+
                 UpdateArrowParentRotation();
                 UpdateArrowChildPosition();
             }
@@ -150,6 +153,9 @@ public class PlayerSlowMoLaunch : MonoBehaviour
 
     private void CalculateAndApplyLaunchForce()
     {
+        if (_currentLaunchChargeTime > maxLaunchChargeTime) // _currentLaunchChargeTime includes the time spent sitting on a fully charged launch, so it should be capped to the maxLaunchChargeTime
+            _currentLaunchChargeTime = maxLaunchChargeTime;
+
         float calculatedLaunchForceValue = baseLaunchForceValue + (((maxLaunchForceValue - baseLaunchForceValue) / maxLaunchChargeTime) * _currentLaunchChargeTime);
         Vector2 amplifiedLaunchForceVector = new Vector2(calculatedLaunchForceValue * xLaunchForceMultiplier, calculatedLaunchForceValue * yLaunchForceMultiplier);
 
