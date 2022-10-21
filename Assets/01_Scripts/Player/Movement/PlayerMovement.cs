@@ -60,7 +60,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         _horizontalInput = _playerInput.GetMovementInput();
-        _horizontalInput = Mathf.Round(_horizontalInput);
+        //_horizontalInput = Mathf.Round(_horizontalInput);
+        if (_horizontalInput > 0) _horizontalInput = 1;
+        else if (_horizontalInput < 0) _horizontalInput = -1;
+        else _horizontalInput = 0;
 
         HandleRun();
         HandleJump();
