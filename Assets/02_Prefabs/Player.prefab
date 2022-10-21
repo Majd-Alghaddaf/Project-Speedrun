@@ -746,7 +746,7 @@ MonoBehaviour:
   jumpingAnimationBoolName: isJumping
   jumpForce: 11
   longJumpForce: 24
-  longJumpMaxDuration: 0.5
+  longJumpMaxDuration: 0.4
   wallSlidingSpeed: 5
   wallStickDuration: 0.2
   wallJumpForce: {x: 4, y: 12}
@@ -780,6 +780,7 @@ MonoBehaviour:
   timeScaleValue: 0.001
   horizontalMovementLockDurationAfterLaunch: 0.5
   maxLaunchChargeTime: 1.5
+  timeToReachMaxLaunchForceValue: 3
   launchChargeCooldown: 0.2
   arrowParentGameObject: {fileID: 0}
   arrowChildGameObject: {fileID: 0}

@@ -141,7 +141,12 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.velocity = new Vector2(wallJumpForce.x * wallJumpDirection, wallJumpForce.y);
 
         _playerAudio.PlayAudioClipOneShotFromMainSource(jumpAudioClip, jumpvolumeScale);
+
         SetCanDoubleJump(true);
+
+        InterruptLongJumpLock();
+        _canLongJump = true;
+
         SetSpriteFlip();
         StartCoroutine(LockWallJumping());
     }
@@ -172,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
         Jump();
 
         SetCanDoubleJump(false);
+
         InterruptLongJumpLock();
         _canLongJump = true;
     }
