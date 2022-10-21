@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private string jumpingAnimationBoolName = "isJumping";
     [SerializeField] [Range(0f,50f)] private float jumpForce;
     [SerializeField] [Range(0f, 50f)] private float longJumpForce;
+    [SerializeField] [Range(0f, 2f)] private float longJumpMaxDuration;
     [Header("Wall Sliding & Jumping")]
     [SerializeField] [Range(0f, 25f)] private float wallSlidingSpeed;
     [SerializeField] [Range(0f, 2f)] private float wallStickDuration;
@@ -39,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Animator _animator;
     private PlayerInput _playerInput;
+    private Coroutine _lockLongJumpCoroutine;
 
     private float _horizontalInput = 0f;
     private bool _lockHorizontalMovement = false;
@@ -49,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _canWallJump = true;
     private bool _canDoubleJump = true;
     private bool _canDash = true;
+    private bool _canLongJump = true;
+    private bool _lockLongJumpCoroutineStarted = false;
 
     private void Awake()
     {
@@ -209,11 +213,38 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleLongJump()
     {
-        if (!_isGrounded && _playerInput.GetJumpHoldInput())
+        if(_isGrounded == true) { return; }
+
+        if(_canLongJump == false) { return; }
+
+        if (_playerInput.GetJumpHoldInput())
         {
-             float force = _isWallSliding ? longJumpForce / longJumpForceDividerWhenSliding : longJumpForce; //to prevent player from spamming long jump on wall to get up
-            _rigidbody.AddForce(new Vector2(0f, force), ForceMode2D.Force);
+            LongJump();
+            if(_lockLongJumpCoroutineStarted == false)
+            {
+                _lockLongJumpCoroutine = StartCoroutine(LockLongJumpAfterDuration());
+                _lockLongJumpCoroutineStarted = true;
+            }
         }
+        else
+        {
+            _canLongJump = false;
+            Debug.Log("_canLongJump false else statement");
+        }
+    }
+
+    private void LongJump()
+    {
+        float force = _isWallSliding ? longJumpForce / longJumpForceDividerWhenSliding : longJumpForce; //to prevent player from spamming long jump on wall to get up
+        _rigidbody.AddForce(new Vector2(0f, force), ForceMode2D.Force);
+    }
+
+    private IEnumerator LockLongJumpAfterDuration()
+    {
+        yield return new WaitForSeconds(longJumpMaxDuration);
+        _canLongJump = false;
+        _lockLongJumpCoroutineStarted = false;
+        Debug.Log("Setting _canLongJump to False");
     }
 
     private void HandleDash()
@@ -273,9 +304,15 @@ public class PlayerMovement : MonoBehaviour
         SetCanDoubleJump(true);
     }
 
-    public void SetCanDoubleJump(bool value)
+    public void SetCanDoubleJump(bool value) => _canDoubleJump = value;
+
+    public void SetCanLongJump(bool value) => _canLongJump = value;
+
+    public void InterruptLongJumpLock()
     {
-        _canDoubleJump = value;
+        StopCoroutine(_lockLongJumpCoroutine);
+        _lockLongJumpCoroutineStarted = false;
+        Debug.Log("Stopping Long Jump Lock Coroutine");
     }
 
     public void Launch(Vector2 launchForceVector, float horizontalMovementLockDurationAfterLaunch)

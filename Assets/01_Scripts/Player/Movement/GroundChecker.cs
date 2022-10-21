@@ -17,16 +17,29 @@ public class GroundChecker : MonoBehaviour
     {
         if (LayerMask.LayerToName(collision.gameObject.layer) == groundLayerMask)
         {
-            _playerMovement.SetIsGrounded(true);
-            _playerMovement.SetCanDoubleJump(true);
+            OnGroundEnter();
         }
+    }
+
+    private void OnGroundEnter()
+    {
+        _playerMovement.SetIsGrounded(true);
+        _playerMovement.SetCanDoubleJump(true);
+
+        _playerMovement.SetCanLongJump(true);
+        _playerMovement.InterruptLongJumpLock();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (LayerMask.LayerToName(collision.gameObject.layer) == groundLayerMask)
         {
-            _playerMovement.SetIsGrounded(false);
+            OnGroundExit();
         }
+    }
+
+    private void OnGroundExit()
+    {
+        _playerMovement.SetIsGrounded(false);
     }
 }
