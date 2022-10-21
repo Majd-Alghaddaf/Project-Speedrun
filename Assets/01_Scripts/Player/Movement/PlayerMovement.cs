@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator _animator;
     private PlayerInput _playerInput;
     private Coroutine _lockLongJumpCoroutine;
+    private Coroutine _lockHorizontalMovementCoroutine;
 
     private float _horizontalInput = 0f;
     private bool _lockHorizontalMovement = false;
@@ -321,9 +322,16 @@ public class PlayerMovement : MonoBehaviour
     {
         _rigidbody.velocity = Vector2.zero; // resets velocity right before launching for no interference
 
-        StartCoroutine(LockHorizontalMovement(horizontalMovementLockDurationAfterLaunch));
+        _lockHorizontalMovementCoroutine = StartCoroutine(LockHorizontalMovement(horizontalMovementLockDurationAfterLaunch));
         _rigidbody.AddForce(launchForceVector, ForceMode2D.Impulse);
 
         SetCanDoubleJump(true);
+    }
+
+    public void InterruptHorizontalMovementLock()
+    {
+        if(_lockHorizontalMovementCoroutine == null) { return; }
+
+        StopCoroutine(_lockHorizontalMovementCoroutine);
     }
 }

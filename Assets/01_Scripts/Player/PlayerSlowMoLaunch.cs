@@ -45,6 +45,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     [SerializeField] private AudioSource slowMoAudioSource;
 
     private PlayerInput _playerInput;
+    private PlayerMovement _playerMovement;
 
     private bool _hasEnteredSlowMo = false;
     private float _initialLaunchChargeTime = 0f;
@@ -53,6 +54,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -63,20 +65,22 @@ public class PlayerSlowMoLaunch : MonoBehaviour
             {
                 if (_hasEnteredSlowMo == false)
                 {
+                    // code below is called once at the beginning of the launch
                     _initialLaunchChargeTime = Time.time;
+                    _playerMovement.InterruptHorizontalMovementLock(); // incase the player chained two launches back to back, causing interference in the lock
+
                     _playerAudio.PlayAudioClip(slowMoAudioSource, slowMoAudioClip, slowMoVolumeScale);
                     EnableSlowMoArrow();
                 }
+
                 _hasEnteredSlowMo = true;
-
                 SlowDownTime();
-
                 _currentLaunchChargeTime = (Time.time - _initialLaunchChargeTime) * (1 / timeScaleValue);
 
                 UpdateArrowParentRotation();
                 UpdateArrowChildPosition();
             }
-            else
+            else // player has let go of slow mo launch input, or time has exceeded
             {
                 if (_hasEnteredSlowMo == true)
                 {
@@ -172,7 +176,7 @@ public class PlayerSlowMoLaunch : MonoBehaviour
         }
 
         Vector2 finalLaunchForceVector = launchDirection.normalized * amplifiedLaunchForceVector;
-        GetComponent<PlayerMovement>().Launch(finalLaunchForceVector, horizontalMovementLockDurationAfterLaunch);
+        _playerMovement.Launch(finalLaunchForceVector, horizontalMovementLockDurationAfterLaunch);
     }
 
     private static void ResetTimeScale()
@@ -185,7 +189,6 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     {
         if(nearbySlowMoObject != null && canSlowMo)
         {
-            Debug.LogError("Nearby Slowmo Object Already Assigned!");
             return false;
         }
         else
