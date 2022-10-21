@@ -220,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
         if (_playerInput.GetJumpHoldInput())
         {
             LongJump();
-            if(_lockLongJumpCoroutineStarted == false)
+            if(_lockLongJumpCoroutineStarted == false) // so that we don't have multiple instances of the same coroutine running at the same time
             {
                 _lockLongJumpCoroutine = StartCoroutine(LockLongJumpAfterDuration());
                 _lockLongJumpCoroutineStarted = true;
@@ -229,7 +229,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             _canLongJump = false;
-            Debug.Log("_canLongJump false else statement");
         }
     }
 
@@ -244,7 +243,6 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(longJumpMaxDuration);
         _canLongJump = false;
         _lockLongJumpCoroutineStarted = false;
-        Debug.Log("Setting _canLongJump to False");
     }
 
     private void HandleDash()
@@ -310,9 +308,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void InterruptLongJumpLock()
     {
+        if(_lockLongJumpCoroutine == null) { return; }
+
         StopCoroutine(_lockLongJumpCoroutine);
         _lockLongJumpCoroutineStarted = false;
-        Debug.Log("Stopping Long Jump Lock Coroutine");
     }
 
     public void Launch(Vector2 launchForceVector, float horizontalMovementLockDurationAfterLaunch)
