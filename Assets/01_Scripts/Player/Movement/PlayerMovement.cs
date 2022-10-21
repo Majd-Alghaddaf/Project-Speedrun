@@ -169,7 +169,10 @@ public class PlayerMovement : MonoBehaviour
     private void DoubleJump()
     {
         Jump();
+
         SetCanDoubleJump(false);
+        InterruptLongJumpLock();
+        _canLongJump = true;
     }
 
     private void HandleWallSlide()
