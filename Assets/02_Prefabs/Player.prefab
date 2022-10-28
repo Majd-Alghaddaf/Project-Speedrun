@@ -745,15 +745,15 @@ MonoBehaviour:
   moveSpeed: 7
   jumpingAnimationBoolName: isJumping
   timeBeforeDisablingJump: 0.1
-  jumpForce: 11
+  jumpForce: 13
   longJumpForce: 24
   longJumpMaxDuration: 0.4
-  wallSlidingSpeed: 5
-  wallStickDuration: 0.2
-  wallJumpForce: {x: 4, y: 12}
+  wallSlidingSpeed: 3
+  wallStickDuration: 0.1
+  wallJumpForce: {x: 8, y: 12}
   timeBetweenWallJumps: 0.3
   wallJumpHorizontalLockDuration: 0.2
-  longJumpForceDividerWhenSliding: 1.8
+  longJumpForceDividerWhenSliding: 1.2
   dashForceValue: 35
   dashDuration: 0.12
   timeBetweenDashes: 1
@@ -780,7 +780,7 @@ MonoBehaviour:
   nearbySlowMoObject: {fileID: 0}
   timeScaleValue: 0.001
   horizontalMovementLockDurationAfterLaunch: 0.5
-  maxLaunchChargeTime: 1.5
+  maxLaunchChargeTime: 0.75
   timeToReachMaxLaunchForceValue: 3
   launchChargeCooldown: 0.2
   arrowParentGameObject: {fileID: 0}

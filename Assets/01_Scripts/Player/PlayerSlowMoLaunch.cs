@@ -14,9 +14,9 @@ public class PlayerSlowMoLaunch : MonoBehaviour
     [SerializeField] [Range(0f, 2f)] private float horizontalMovementLockDurationAfterLaunch = 0.5f;
 
     [Header("Charging")]
-    [Tooltip("The maximum amount of time the player can hold the charge button to launch afterwards")]
+    [Tooltip("The amount of time it takes to reach the maximum charge force value")]
     [SerializeField] [Range(0.5f, 5f)] float maxLaunchChargeTime = 2f;
-    [Tooltip("The time it takes to reach the maximum launch force value")]
+    [Tooltip("The maximum amount of time the player can hold the charge button before getting automatically launched")]
     [SerializeField] [Range(0.5f, 5f)] float timeToReachMaxLaunchForceValue = 2f;
     [Tooltip("The time to be waited between two consecutive charges")]
     [SerializeField] [Range(0f, 3f)] float launchChargeCooldown = 1f;
