@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         _horizontalInput = _playerInput.GetMovementInput();
-        RoundHorizontalInput();
+        //RoundHorizontalInput();
 
         HandleRun();
         HandleJump();
@@ -173,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            return _horizontalInput;
+            return Mathf.Sign(_horizontalInput);
         }
     }
 
@@ -225,7 +225,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 facingDirection = frontGameObject.transform.position - transform.position;
         facingDirection = facingDirection.normalized;
 
-        return !(Mathf.Sign(facingDirection.x) == _horizontalInput);
+        return !(Mathf.Sign(facingDirection.x) == Mathf.Sign(_horizontalInput));
     }
 
     private void IncrementWallStickTimer()
