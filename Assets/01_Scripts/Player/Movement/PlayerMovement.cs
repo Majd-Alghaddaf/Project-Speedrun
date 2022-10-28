@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0f, 25f)] private float moveSpeed;
     [Header("Jumping")]
     [SerializeField] private string jumpingAnimationBoolName = "isJumping";
+    [Tooltip("When a player is no longer grounded, there will be a time window where they can still jump. This variable represents the duration of that time window.")]
+    [SerializeField] [Range(0f, 0.5f)] private float timeBeforeDisablingJump;
     [SerializeField] [Range(0f,50f)] private float jumpForce;
     [SerializeField] [Range(0f, 50f)] private float longJumpForce;
     [SerializeField] [Range(0f, 2f)] private float longJumpMaxDuration;
@@ -46,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private float _horizontalInput = 0f;
     private bool _lockHorizontalMovement = false;
     private bool _isGrounded = true;
+    private bool _canJump = true;
     private bool _isWallSliding = false;
     private bool _isStickingToWall = false;
     private float _wallStickTimer = 0f;
@@ -119,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJump()
     {
-        if (_isGrounded && _playerInput.GetJumpPressedInput())
+        if (_canJump && _playerInput.GetJumpPressedInput())
         {
             Jump();
         }
@@ -127,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
         {
             WallJump();
         }
-        else if(!_isGrounded && !_isWallSliding && _canDoubleJump && _playerInput.GetJumpPressedInput())
+        else if(!_canJump && !_isWallSliding && _canDoubleJump && _playerInput.GetJumpPressedInput())
         {
             DoubleJump();
         }
@@ -135,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+        _canJump = false;
         _rigidbody.AddForce(new Vector2(0f, (_rigidbody.velocity.y * -1) + jumpForce), ForceMode2D.Impulse);
         _playerAudio.PlayAudioClipOneShotFromMainSource(jumpAudioClip,jumpvolumeScale);
     }
@@ -306,6 +310,17 @@ public class PlayerMovement : MonoBehaviour
     {
         _isGrounded = value;
         _animator.SetBool(jumpingAnimationBoolName, !_isGrounded);
+    }
+
+    public void SetCanJump(bool value)
+    {
+        _canJump = value;
+    }
+
+    public IEnumerator DisableFirstJumpAfterSeconds()
+    {
+        yield return new WaitForSeconds(timeBeforeDisablingJump);
+        _canJump = false;
     }
 
     public void OnWallSlidingEnter()

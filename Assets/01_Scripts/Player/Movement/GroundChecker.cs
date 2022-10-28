@@ -24,6 +24,7 @@ public class GroundChecker : MonoBehaviour
     private void OnGroundEnter()
     {
         _playerMovement.SetIsGrounded(true);
+        _playerMovement.SetCanJump(true);
         _playerMovement.SetCanDoubleJump(true);
 
         _playerMovement.SetCanLongJump(true);
@@ -41,5 +42,6 @@ public class GroundChecker : MonoBehaviour
     private void OnGroundExit()
     {
         _playerMovement.SetIsGrounded(false);
+        StartCoroutine(_playerMovement.DisableFirstJumpAfterSeconds());
     }
 }

@@ -744,6 +744,7 @@ MonoBehaviour:
   runningAnimationBoolName: isRunning
   moveSpeed: 7
   jumpingAnimationBoolName: isJumping
+  timeBeforeDisablingJump: 0.1
   jumpForce: 11
   longJumpForce: 24
   longJumpMaxDuration: 0.4
