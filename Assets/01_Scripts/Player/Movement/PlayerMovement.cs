@@ -141,7 +141,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void WallJump()
     {
-        float wallJumpDirection = CalculateWallJumpDirection();
+        float wallJumpDirection = GetFacingDirection();
+        if (_horizontalInput == 0)
+            wallJumpDirection *= -1;
 
         StartCoroutine(LockHorizontalMovement(wallJumpHorizontalLockDuration));
         _rigidbody.velocity = new Vector2(wallJumpForce.x * wallJumpDirection, wallJumpForce.y);
@@ -157,13 +159,13 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(LockWallJumping());
     }
 
-    private float CalculateWallJumpDirection()
+    private float GetFacingDirection()
     {
         if (_horizontalInput == 0)
         {
             Vector2 facingDirection = frontGameObject.transform.position - transform.position;
             facingDirection = facingDirection.normalized;
-            return Mathf.Sign(facingDirection.x) * -1;
+            return Mathf.Sign(facingDirection.x);
         }
         else
         {
@@ -263,7 +265,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleDash()
     {
-        if (_playerInput.GetDashInput() && _horizontalInput != 0 && _canDash)
+        if (_playerInput.GetDashInput() && _canDash)
         {
             Dash();
             _playerAudio.PlayOneShotRandomAudioClipFromArrayFromMainSource(dashAudioClips, dashVolumeScale);
@@ -273,9 +275,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        float horizontalDashForce = _horizontalInput * dashForceValue;
+        float dashDirection = GetFacingDirection();
 
-        if (Mathf.Sign(_horizontalInput) != Mathf.Sign(_rigidbody.velocity.x)) //compensate force value if going in opposite direction of dash
+        float horizontalDashForce = dashDirection * dashForceValue;
+
+        if (Mathf.Sign(dashDirection) != Mathf.Sign(_rigidbody.velocity.x)) //compensate force value if going in opposite direction of dash
         {
             horizontalDashForce += _rigidbody.velocity.x * -1;
         }
