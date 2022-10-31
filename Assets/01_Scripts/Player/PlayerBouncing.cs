@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerBouncing : MonoBehaviour
 {
     [SerializeField] float verticalBouncingForceValue;
+    [SerializeField] float timeBeforeAllowingDoubleJump = 0.2f;
 
     private PlayerMovement _playerMovement;
 
@@ -16,6 +17,6 @@ public class PlayerBouncing : MonoBehaviour
     public void OnTouchingBouncingObject()
     {
         Vector2 bounceForceVector = new Vector2(0f, verticalBouncingForceValue);
-        _playerMovement.Bounce(bounceForceVector);
+        _playerMovement.Bounce(bounceForceVector, timeBeforeAllowingDoubleJump);
     }
 }

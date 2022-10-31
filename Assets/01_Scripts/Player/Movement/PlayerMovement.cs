@@ -139,7 +139,18 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         _canJump = false;
-        _rigidbody.AddForce(new Vector2(0f, (_rigidbody.velocity.y * -1) + jumpForce), ForceMode2D.Impulse);
+
+        float verticalJumpForceValue;
+        if(_rigidbody.velocity.y < 0) // if player is falling, need to compensate by adding the equivalent of the gravity's force to the jump force
+        {
+            verticalJumpForceValue = (_rigidbody.velocity.y * -1) + jumpForce; 
+        }
+        else
+        {
+            verticalJumpForceValue = jumpForce;
+        }
+
+        _rigidbody.AddForce(new Vector2(0f, verticalJumpForceValue), ForceMode2D.Impulse);
         _playerAudio.PlayAudioClipOneShotFromMainSource(jumpAudioClip,jumpvolumeScale);
     }
 
@@ -306,6 +317,12 @@ public class PlayerMovement : MonoBehaviour
         _lockHorizontalMovement = false;
     }
 
+    private IEnumerator SetCanDoubleJumpAfterSeconds(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _canDoubleJump = true;
+    }
+
     public void SetIsGrounded(bool value)
     {
         _isGrounded = value;
@@ -359,11 +376,11 @@ public class PlayerMovement : MonoBehaviour
         SetCanDoubleJump(true);
     }
 
-    public void Bounce(Vector2 bounceForceVector)
+    public void Bounce(Vector2 bounceForceVector, float timeBeforeAllowingDoubleJump)
     {
         _rigidbody.velocity = Vector2.zero;
         _rigidbody.AddForce(bounceForceVector, ForceMode2D.Impulse);
-        SetCanDoubleJump(true);
+        StartCoroutine(SetCanDoubleJumpAfterSeconds(timeBeforeAllowingDoubleJump));
     }
 
     public void InterruptHorizontalMovementLock()
