@@ -611,6 +611,7 @@ GameObject:
   - component: {fileID: 1740607405117450170}
   - component: {fileID: 755755077}
   - component: {fileID: 9028630001939659320}
+  - component: {fileID: 5816121660760381876}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -755,7 +756,7 @@ MonoBehaviour:
   wallJumpHorizontalLockDuration: 0.2
   longJumpForceDividerWhenSliding: 1.2
   dashForceValue: 35
-  dashDuration: 0.12
+  dashDuration: 0.25
   timeBetweenDashes: 1
   _playerAudio: {fileID: 1627598886}
   dashAudioClips:
@@ -811,3 +812,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeyboardAndMouseEnabled: 1
+--- !u!114 &5816121660760381876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740607405117450150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc303698695cee45a84be7a597e0d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalBouncingForceValue: 50
