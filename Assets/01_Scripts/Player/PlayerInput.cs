@@ -27,11 +27,11 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        if(Keyboard.current.cKey.wasPressedThisFrame && Keyboard.current.shiftKey.isPressed)
+        if(Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame && Keyboard.current.shiftKey.isPressed)
         {
             SetGamepadAsInputDevice();
         }
-        else if(Gamepad.current.selectButton.wasPressedThisFrame)
+        else if(Gamepad.current != null && Gamepad.current.selectButton.wasPressedThisFrame)
         {
             SetKeyboardAndMouseAsInputDevice();
         }
@@ -39,23 +39,31 @@ public class PlayerInput : MonoBehaviour
 
     private void SetKeyboardAndMouseAsInputDevice()
     {
+        if(Keyboard.current == null && Mouse.current == null) { return; }
+
         Debug.LogWarning("Keyboard & Mouse Enabled - Gamepad Disabled");
 
         InputSystem.EnableDevice(Keyboard.current);
         InputSystem.EnableDevice(Mouse.current);
-        InputSystem.DisableDevice(Gamepad.current);
-
         KeyboardAndMouseEnabled = true;
+
+        if (Gamepad.current != null)
+            InputSystem.DisableDevice(Gamepad.current);
     }
 
     private void SetGamepadAsInputDevice()
     {
+        if(Gamepad.current == null) { return; }
+
         Debug.LogWarning("Keyboard & Mouse Disabled - Gamepad Enabled");
 
-        InputSystem.DisableDevice(Keyboard.current);
-        InputSystem.DisableDevice(Mouse.current);
         InputSystem.EnableDevice(Gamepad.current);
 
+        if(Keyboard.current != null && Mouse.current != null)
+        {
+            InputSystem.DisableDevice(Keyboard.current);
+            InputSystem.DisableDevice(Mouse.current);
+        }
         KeyboardAndMouseEnabled = false;
     }
 
