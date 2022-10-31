@@ -824,4 +824,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc303698695cee45a84be7a597e0d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalBouncingForceValue: 50
+  verticalBouncingForceValue: 40

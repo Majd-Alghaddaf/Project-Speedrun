@@ -359,6 +359,13 @@ public class PlayerMovement : MonoBehaviour
         SetCanDoubleJump(true);
     }
 
+    public void Bounce(Vector2 bounceForceVector)
+    {
+        _rigidbody.velocity = Vector2.zero;
+        _rigidbody.AddForce(bounceForceVector, ForceMode2D.Impulse);
+        SetCanDoubleJump(true);
+    }
+
     public void InterruptHorizontalMovementLock()
     {
         if(_lockHorizontalMovementCoroutine == null) { return; }
