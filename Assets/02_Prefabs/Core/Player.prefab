@@ -755,8 +755,8 @@ MonoBehaviour:
   timeBetweenWallJumps: 0.3
   wallJumpHorizontalLockDuration: 0.2
   longJumpForceDividerWhenSliding: 1.2
-  dashForceValue: 35
-  dashDuration: 0.25
+  dashForceValue: 25
+  dashDuration: 0.2
   timeBetweenDashes: 1
   _playerAudio: {fileID: 1627598886}
   dashAudioClips:
@@ -824,4 +824,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc303698695cee45a84be7a597e0d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalBouncingForceValue: 25
+  verticalBouncingForceValue: 15
+  timeBeforeAllowingDoubleJump: 0.2
