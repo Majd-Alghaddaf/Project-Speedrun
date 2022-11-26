@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0f,50f)] private float jumpForce;
     [SerializeField] [Range(0f, 50f)] private float longJumpForce;
     [SerializeField] [Range(0f, 2f)] private float longJumpMaxDuration;
+    [SerializeField] [Range(0f, 3f)] private float doubleJumpMultiplier;
     [Header("Wall Sliding & Jumping")]
     [SerializeField] [Range(0f, 25f)] private float wallSlidingSpeed;
     [SerializeField] [Range(0f, 2f)] private float wallStickDuration;
@@ -136,19 +137,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void Jump(bool isDoubleJump = false)
     {
         _canJump = false;
 
         float verticalJumpForceValue;
         if(_rigidbody.velocity.y < 0) // if player is falling, need to compensate by adding the equivalent of the gravity's force to the jump force
-        {
             verticalJumpForceValue = (_rigidbody.velocity.y * -1) + jumpForce; 
-        }
         else
-        {
             verticalJumpForceValue = jumpForce;
-        }
+        if (isDoubleJump)
+            verticalJumpForceValue *= doubleJumpMultiplier;
 
         _rigidbody.AddForce(new Vector2(0f, verticalJumpForceValue), ForceMode2D.Impulse);
         _playerAudio.PlayAudioClipOneShotFromMainSource(jumpAudioClip,jumpvolumeScale);
@@ -197,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void DoubleJump()
     {
-        Jump();
+        Jump(true);
 
         SetCanDoubleJump(false);
 
