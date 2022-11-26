@@ -5,6 +5,24 @@ using UnityEngine.InputSystem;
 
 public class PositionResetter : MonoBehaviour
 {
+    #region Singleton
+    private static PositionResetter _instance;
+
+    public static PositionResetter Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+    #endregion
+
     [SerializeField] GameObject playerObject;
     [SerializeField] Transform positionResetObject;
 
@@ -12,7 +30,12 @@ public class PositionResetter : MonoBehaviour
     {
         if(Keyboard.current.leftShiftKey.isPressed && Keyboard.current.rKey.wasPressedThisFrame)
         {
-            playerObject.transform.position = positionResetObject.position;
+            ResetPlayerPosition();
         }
+    }
+
+    public void ResetPlayerPosition()
+    {
+        playerObject.transform.position = positionResetObject.position;
     }
 }
