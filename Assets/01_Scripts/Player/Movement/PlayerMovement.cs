@@ -306,7 +306,14 @@ public class PlayerMovement : MonoBehaviour
     {
         _canDash = false;
         yield return new WaitForSeconds(timeBetweenDashes);
-        _canDash = true;
+
+        if(_isGrounded)
+            _canDash = true;
+        else
+        {
+            yield return new WaitUntil(() => _isGrounded == true);
+            _canDash = true;
+        }
     }
 
     private IEnumerator LockHorizontalMovement(float duration)
