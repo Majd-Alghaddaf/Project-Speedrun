@@ -746,6 +746,7 @@ MonoBehaviour:
   moveSpeed: 8
   jumpingAnimationBoolName: isJumping
   timeBeforeDisablingJump: 0.1
+  recentlyGroundedMaxTime: 0
   jumpForce: 13
   longJumpForce: 24
   longJumpMaxDuration: 0.4

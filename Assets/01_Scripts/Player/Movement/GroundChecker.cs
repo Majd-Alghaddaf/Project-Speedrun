@@ -29,6 +29,8 @@ public class GroundChecker : MonoBehaviour
 
         _playerMovement.SetCanLongJump(true);
         _playerMovement.InterruptLongJumpLock();
+
+        StartCoroutine(_playerMovement.EnableWasRecentlyGroundedForDuration());
     }
 
     private void OnTriggerExit2D(Collider2D collision)

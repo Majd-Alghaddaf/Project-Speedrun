@@ -18,7 +18,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private string jumpingAnimationBoolName = "isJumping";
     [Tooltip("When a player is no longer grounded, there will be a time window where they can still jump. This variable represents the duration of that time window.")]
     [SerializeField] [Range(0f, 0.5f)] private float timeBeforeDisablingJump;
-    [SerializeField] [Range(0f,50f)] private float jumpForce;
+    [SerializeField] [Range(0f, 2f)] private float recentlyGroundedMaxTime;
+    [SerializeField] [Range(0f, 50f)] private float jumpForce;
     [SerializeField] [Range(0f, 50f)] private float longJumpForce;
     [SerializeField] [Range(0f, 2f)] private float longJumpMaxDuration;
     [SerializeField] [Range(0f, 3f)] private float doubleJumpMultiplier;
@@ -58,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _canDash = true;
     private bool _canLongJump = true;
     private bool _lockLongJumpCoroutineStarted = false;
+    private bool _wasRecentlyGrounded = true;
 
     private void Awake()
     {
@@ -307,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
         _canDash = false;
         yield return new WaitForSeconds(timeBetweenDashes);
 
-        if(_isGrounded)
+        if(_isGrounded || _wasRecentlyGrounded)
             _canDash = true;
         else
         {
@@ -394,5 +396,14 @@ public class PlayerMovement : MonoBehaviour
         if(_lockHorizontalMovementCoroutine == null) { return; }
 
         StopCoroutine(_lockHorizontalMovementCoroutine);
+    }
+
+    public IEnumerator EnableWasRecentlyGroundedForDuration()
+    {
+        recentlyGroundedMaxTime = timeBetweenDashes; // only reason it's needed for now, might change later
+
+        _wasRecentlyGrounded = true;
+        yield return new WaitForSeconds(recentlyGroundedMaxTime);
+        _wasRecentlyGrounded = false;
     }
 }

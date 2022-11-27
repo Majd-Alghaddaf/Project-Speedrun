@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BouncingObject : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.CompareTag(Config.Instance.playerTag))
+        if (collision.gameObject.CompareTag(Config.Instance.playerTag))
         {
-            PlayerBouncing playerBouncing = collision.collider.GetComponent<PlayerBouncing>();
+            PlayerBouncing playerBouncing = collision.gameObject.GetComponent<PlayerBouncing>();
             playerBouncing.OnTouchingBouncingObject();
+
+            gameObject.SetActive(false);
         }
     }
 }
