@@ -26,6 +26,13 @@ public class PositionResetter : MonoBehaviour
     [SerializeField] GameObject playerObject;
     [SerializeField] Transform positionResetObject;
 
+    private GameObject[] bouncingObjects;
+
+    private void Start()
+    {
+        bouncingObjects = GameObject.FindGameObjectsWithTag("BouncingObject");
+    }
+
     void Update()
     {
         if(Keyboard.current.leftShiftKey.isPressed && Keyboard.current.rKey.wasPressedThisFrame)
@@ -37,5 +44,10 @@ public class PositionResetter : MonoBehaviour
     public void ResetPlayerPosition()
     {
         playerObject.transform.position = positionResetObject.position;
+
+        foreach(GameObject bouncingObject in bouncingObjects)
+        {
+            bouncingObject.SetActive(true);
+        }
     }
 }

@@ -7,6 +7,7 @@ public class GroundChecker : MonoBehaviour
     [SerializeField] private string groundLayerMask = "Ground";
 
     private PlayerMovement _playerMovement;
+    private Coroutine _wasRecentlyGroundedCoroutine;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class GroundChecker : MonoBehaviour
         _playerMovement.SetCanLongJump(true);
         _playerMovement.InterruptLongJumpLock();
 
-        StartCoroutine(_playerMovement.EnableWasRecentlyGroundedForDuration());
+        HandleRecentlyGrounded();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -45,5 +46,15 @@ public class GroundChecker : MonoBehaviour
     {
         _playerMovement.SetIsGrounded(false);
         StartCoroutine(_playerMovement.DisableFirstJumpAfterSeconds());
+
+        HandleRecentlyGrounded();
+    }
+
+    private void HandleRecentlyGrounded()
+    {
+        if (_wasRecentlyGroundedCoroutine != null)
+            StopCoroutine(_wasRecentlyGroundedCoroutine);
+
+        _wasRecentlyGroundedCoroutine = StartCoroutine(_playerMovement.EnableWasRecentlyGroundedForDuration());
     }
 }
