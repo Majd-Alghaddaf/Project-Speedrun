@@ -24,14 +24,14 @@ public class PositionResetter : MonoBehaviour
     #endregion
 
     [SerializeField] GameObject playerObject;
-    [SerializeField] Transform positionResetObject;
+    [SerializeField] Transform startingPosition;
 
-    private GameObject[] bouncingObjects;
+    [Header("Testing Purposes")]
+    [SerializeField] bool multipleCheckpoints = false;
+    [SerializeField] List<Transform> checkpoints;
 
-    private void Start()
-    {
-        bouncingObjects = GameObject.FindGameObjectsWithTag("BouncingObject");
-    }
+    private Transform resetTransform;
+    private int checkpointIndex = 0;
 
     void Update()
     {
@@ -39,15 +39,37 @@ public class PositionResetter : MonoBehaviour
         {
             ResetPlayerPosition();
         }
+
+        if (Keyboard.current.digit0Key.isPressed)
+            resetTransform = startingPosition;
+        else if (Keyboard.current.digit1Key.isPressed)
+            resetTransform = checkpoints[0];
+        else if (Keyboard.current.digit2Key.isPressed)
+            resetTransform = checkpoints[1];
+        else if (Keyboard.current.digit3Key.isPressed)
+            resetTransform = checkpoints[2];
+        else if (Keyboard.current.digit4Key.isPressed)
+            resetTransform = checkpoints[3];
+        else if (Keyboard.current.digit5Key.isPressed)
+            resetTransform = checkpoints[4];
     }
 
     public void ResetPlayerPosition()
     {
-        playerObject.transform.position = positionResetObject.position;
+        Vector2 resetPosition = Vector2.zero;
 
-        foreach(GameObject bouncingObject in bouncingObjects)
+        if(multipleCheckpoints)
         {
-            bouncingObject.SetActive(true);
+            if (resetTransform == null)
+                resetPosition = startingPosition.position;
+            else
+                resetPosition = resetTransform.position;
         }
+        else
+        {
+            resetPosition = startingPosition.position;
+        }
+
+        playerObject.transform.position = resetPosition;
     }
 }
