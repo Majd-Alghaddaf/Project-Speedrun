@@ -8,6 +8,7 @@ public class Dangerous_Test : MonoBehaviour
     {
         if (collision.CompareTag(Config.Instance.playerTag))
         {
+            Debug.Log('l');
             PositionResetter.Instance.ResetPlayerPosition();
         }
     }
