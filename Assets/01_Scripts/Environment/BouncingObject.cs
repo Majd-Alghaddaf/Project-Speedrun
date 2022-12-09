@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BouncingObject : MonoBehaviour
 {
+    [SerializeField] private bool disableOnTouch = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag(Config.Instance.playerTag))
@@ -11,7 +13,8 @@ public class BouncingObject : MonoBehaviour
             PlayerBouncing playerBouncing = collision.gameObject.GetComponent<PlayerBouncing>();
             playerBouncing.OnTouchingBouncingObject();
 
-            gameObject.SetActive(false);
+            if(disableOnTouch)
+                gameObject.SetActive(false);
         }
     }
 }
