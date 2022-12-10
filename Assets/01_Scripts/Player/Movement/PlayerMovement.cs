@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private Coroutine _lockLongJumpCoroutine;
     private Coroutine _lockHorizontalMovementCoroutine;
 
+    private bool _actionsLocked = false;
     private float _horizontalInput = 0f;
     private bool _lockHorizontalMovement = false;
     private bool _isGrounded = true;
@@ -70,8 +71,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if(_actionsLocked) { return; }
+
         _horizontalInput = _playerInput.GetMovementInput();
-        //RoundHorizontalInput();
 
         HandleRun();
         HandleJump();
@@ -81,16 +83,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     { 
+        if(_actionsLocked) { return; }
+        
         HandleLongJump();
-    }
-    private void RoundHorizontalInput()
-    {
-        if (_horizontalInput > 0) 
-            _horizontalInput = 1;
-        else if (_horizontalInput < 0) 
-            _horizontalInput = -1;
-        else 
-            _horizontalInput = 0;
     }
 
     private void HandleRun()
@@ -331,6 +326,8 @@ public class PlayerMovement : MonoBehaviour
         _canDoubleJump = true;
     }
 
+    public void SetActionsLocked(bool value) => _actionsLocked = value;
+
     public void SetIsGrounded(bool value)
     {
         _isGrounded = value;
@@ -406,4 +403,10 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(recentlyGroundedMaxTime);
         _wasRecentlyGrounded = false;
     }
+
+    public void PlayDeathAnimation()
+    {
+        _rigidbody.velocity = Vector2.zero;
+        // play death animation
+    }    
 }

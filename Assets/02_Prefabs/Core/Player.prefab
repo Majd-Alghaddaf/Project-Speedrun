@@ -611,6 +611,7 @@ GameObject:
   - component: {fileID: 755755077}
   - component: {fileID: 9028630001939659320}
   - component: {fileID: 5816121660760381876}
+  - component: {fileID: 338733222}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -775,3 +776,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticalBouncingForceValue: 15
   timeBeforeAllowingDoubleJump: 0.2
+--- !u!114 &338733222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740607405117450150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3446f0788e3d97d459f32ba85374d2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeInDuration: 1
+  fadeOutDuration: 1

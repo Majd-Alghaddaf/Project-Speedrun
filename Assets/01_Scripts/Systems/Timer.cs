@@ -5,6 +5,24 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
+    #region Singleton
+    private static Timer _instance;
+
+    public static Timer Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+    #endregion
+
     private TextMeshProUGUI timerText;
 
     private float _time = 0;

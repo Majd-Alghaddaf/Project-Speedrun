@@ -38,7 +38,6 @@ public class PositionResetter : MonoBehaviour
         {
             ResetPlayerPosition();
         }
-
         if (Keyboard.current.digit0Key.isPressed)
             resetTransform = startingPosition;
         else if (Keyboard.current.digit1Key.isPressed)
