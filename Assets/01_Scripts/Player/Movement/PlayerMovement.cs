@@ -407,6 +407,8 @@ public class PlayerMovement : MonoBehaviour
     public void PlayDeathAnimation()
     {
         _rigidbody.velocity = Vector2.zero;
-        // play death animation
-    }    
+        _animator.SetTrigger("onDeath");
+        _animator.SetBool(runningAnimationBoolName, false);
+        _animator.SetBool(jumpingAnimationBoolName, false);
+    }
 }

@@ -5,45 +5,45 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerDeathManager : MonoBehaviour
 {
-    [SerializeField] float fadeInDuration = 1f;
-    [SerializeField] float fadeOutDuration = 1f;
+    [SerializeField] float timeBeforeFadeOut = 0.5f;
+    [SerializeField] float timeBetweenFades = 1f;
+    [SerializeField] float timeAfterFadeIn = 0.5f;
+    [SerializeField] Fader fader;
 
     private PlayerMovement _playerMovement;
-    private GroundChecker _groundChecker;
 
     void Start()
     {
         _playerMovement = GetComponent<PlayerMovement>();
-        _groundChecker = GetComponentInChildren<GroundChecker>();
     }
 
     public IEnumerator OnDeath()
     {
         _playerMovement.SetActionsLocked(true);
         _playerMovement.PlayDeathAnimation();
-        _groundChecker.gameObject.SetActive(false);
         Timer.Instance.Stop();
 
+        yield return new WaitForSeconds(timeBeforeFadeOut);
         yield return FadeOut();
 
         PositionResetter.Instance.ResetPlayerPosition();
+        yield return new WaitForSeconds(timeBetweenFades);
 
         yield return FadeIn();
+        yield return new WaitForSeconds(timeAfterFadeIn);
 
-        _groundChecker.gameObject.SetActive(true);
+        _playerMovement.SetCanJump(true);
         _playerMovement.SetActionsLocked(false);
         Timer.Instance.Continue();
     }
 
     private IEnumerator FadeOut()
     {
-        //todo
-        yield return new WaitForSeconds(fadeOutDuration);
+        yield return fader.FadeOut();
     }
 
     private IEnumerator FadeIn()
     {
-        //todo
-        yield return new WaitForSeconds(fadeInDuration);
+        yield return fader.FadeIn();
     }
 }
