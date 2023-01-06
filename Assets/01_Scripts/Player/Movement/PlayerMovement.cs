@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Animator _animator;
     private PlayerInput _playerInput;
+    private TrailRenderer _trailRenderer;
     private Coroutine _lockLongJumpCoroutine;
     private Coroutine _lockHorizontalMovementCoroutine;
 
@@ -69,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
 
     private void Update()
@@ -298,6 +300,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         StartCoroutine(ScreenShake());
+        StartCoroutine(DisplayTrailRenderer());
         StartCoroutine(LockHorizontalMovement(dashDuration));
         _rigidbody.AddForce(new Vector2(horizontalDashForce, 0f), ForceMode2D.Impulse);
     }
@@ -339,8 +342,20 @@ public class PlayerMovement : MonoBehaviour
         {
             yield return null;
         }
+    }
 
-
+    private IEnumerator DisplayTrailRenderer()
+    {
+        if (_trailRenderer != null)
+        {
+            _trailRenderer.enabled = true;
+            yield return new WaitForSeconds(dashDuration);
+            _trailRenderer.enabled = false;
+        }
+        else
+        {
+            yield return null;
+        }
     }
 
     private IEnumerator SetCanDoubleJumpAfterSeconds(float duration)
