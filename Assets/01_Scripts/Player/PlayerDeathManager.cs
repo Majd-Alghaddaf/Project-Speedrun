@@ -9,6 +9,7 @@ public class PlayerDeathManager : MonoBehaviour
     [SerializeField] float timeBetweenFades = 1f;
     [SerializeField] float timeAfterFadeIn = 0.5f;
     [SerializeField] Fader fader;
+    [SerializeField] ParticleSystem deathParticleSystem;
 
     private PlayerMovement _playerMovement;
 
@@ -22,6 +23,7 @@ public class PlayerDeathManager : MonoBehaviour
         _playerMovement.SetActionsLocked(true);
         _playerMovement.PlayDeathAnimation();
         Timer.Instance.Stop();
+        deathParticleSystem.Play();
 
         yield return new WaitForSeconds(timeBeforeFadeOut);
         yield return FadeOut();
