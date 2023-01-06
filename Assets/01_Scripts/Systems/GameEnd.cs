@@ -5,6 +5,15 @@ using UnityEngine;
 public class GameEnd : MonoBehaviour
 {
     [SerializeField] float secondsBeforeEndingGame = 2f;
+    [SerializeField] AudioSource musicAudioSource;
+
+    private AudioSource _audioSource;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(Config.Instance.playerTag) == false) { return; }
@@ -14,10 +23,12 @@ public class GameEnd : MonoBehaviour
 
         playerMovement.SetActionsLocked(true);
         Timer.Instance.Pause();
-
         SaveScore();
 
-        StartCoroutine(EndGame());
+        musicAudioSource.Stop();
+        _audioSource.Play();
+
+        StartCoroutine(ReturnToHomepage());
     }
 
     private void SaveScore()
@@ -38,7 +49,7 @@ public class GameEnd : MonoBehaviour
         }
     }
 
-    private IEnumerator EndGame()
+    private IEnumerator ReturnToHomepage()
     {
         yield return new WaitForSeconds(secondsBeforeEndingGame);
         SceneController.Instance.HomePage();
