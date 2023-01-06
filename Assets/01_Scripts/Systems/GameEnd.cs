@@ -6,6 +6,7 @@ public class GameEnd : MonoBehaviour
 {
     [SerializeField] float secondsBeforeEndingGame = 2f;
     [SerializeField] AudioSource musicAudioSource;
+    [SerializeField] ParticleSystem gameEndParticleSystem;
 
     private AudioSource _audioSource;
 
@@ -27,6 +28,8 @@ public class GameEnd : MonoBehaviour
 
         musicAudioSource.Stop();
         _audioSource.Play();
+
+        gameEndParticleSystem.Play();
 
         StartCoroutine(ReturnToHomepage());
     }
