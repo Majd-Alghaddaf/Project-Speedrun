@@ -15,10 +15,30 @@ public class GameEnd : MonoBehaviour
         playerMovement.SetActionsLocked(true);
         Timer.Instance.Pause();
 
+        SaveScore();
+
         StartCoroutine(EndGame());
     }
 
-    IEnumerator EndGame()
+    private void SaveScore()
+    {
+        string currentTime = Timer.Instance.GetTimeString();
+
+        if (!PlayerPrefs.HasKey("bestTime"))
+        {
+            PlayerPrefs.SetString("bestTime", currentTime);
+            PlayerPrefs.Save();
+            return;
+        }
+
+        if (Timer.Instance.GetTimeFloat() > PlayerPrefs.GetFloat("bestTime"))
+        {
+            PlayerPrefs.SetString("bestTime", currentTime);
+            PlayerPrefs.Save();
+        }
+    }
+
+    private IEnumerator EndGame()
     {
         yield return new WaitForSeconds(secondsBeforeEndingGame);
         SceneController.Instance.HomePage();

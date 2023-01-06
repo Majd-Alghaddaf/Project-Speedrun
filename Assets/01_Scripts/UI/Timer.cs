@@ -72,4 +72,13 @@ public class Timer : MonoBehaviour
     public void Continue() => paused = false;
     public void Pause() => paused = true;
 
+    public float GetTimeFloat()
+    {
+        return _time;
+    }    
+    public string GetTimeString()
+    {
+        return timerText.text;
+    }
+
 }
