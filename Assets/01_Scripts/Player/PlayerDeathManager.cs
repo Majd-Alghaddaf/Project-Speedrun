@@ -22,6 +22,7 @@ public class PlayerDeathManager : MonoBehaviour
     {
         _playerMovement.SetActionsLocked(true);
         _playerMovement.PlayDeathAnimation();
+        _playerMovement.PlayDeathSFX();
         Timer.Instance.Stop();
         deathParticleSystem.Play();
 

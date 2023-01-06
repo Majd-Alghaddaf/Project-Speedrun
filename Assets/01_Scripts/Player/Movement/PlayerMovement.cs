@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float dashVolumeScale = 1f;
     [SerializeField] private AudioClip jumpAudioClip;
     [SerializeField] [Range(0f, 1f)] private float jumpvolumeScale = 1f;
+    [SerializeField] private AudioClip deathAudioClip;
+    [SerializeField] [Range(0f, 1f)] private float deathVolumeScale = 1f;
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
@@ -424,5 +426,10 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetTrigger("onDeath");
         _animator.SetBool(runningAnimationBoolName, false);
         _animator.SetBool(jumpingAnimationBoolName, false);
+    }
+
+    public void PlayDeathSFX()
+    {
+        _playerAudio.PlayAudioClipOneShotFromMainSource(deathAudioClip, deathVolumeScale);
     }
 }

@@ -718,6 +718,8 @@ MonoBehaviour:
   dashVolumeScale: 0.5
   jumpAudioClip: {fileID: 8300000, guid: 1bd18d587e5ab3d458946ad2e181a19d, type: 3}
   jumpvolumeScale: 1
+  deathAudioClip: {fileID: 8300000, guid: cf09750af77188e42a1ce7dd208704cd, type: 3}
+  deathVolumeScale: 1
 --- !u!114 &755755077
 MonoBehaviour:
   m_ObjectHideFlags: 0
