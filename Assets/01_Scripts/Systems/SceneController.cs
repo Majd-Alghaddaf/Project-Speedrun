@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class SceneController : MonoBehaviour
 {
@@ -36,5 +37,13 @@ public class SceneController : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    private void Update()
+    {
+        if(Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            HomePage();
+        }
     }
 }
