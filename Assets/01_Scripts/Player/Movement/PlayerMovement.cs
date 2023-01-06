@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject playerModelGameObject;
     [SerializeField] private GameObject frontGameObject;
-    [SerializeField] private AudioSource movementAudioSource;
+    [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCamera;
     [Header("Movement")]
     [SerializeField] private string runningAnimationBoolName = "isRunning";
     [SerializeField] [Range(0f, 25f)] private float moveSpeed;
@@ -297,6 +297,7 @@ public class PlayerMovement : MonoBehaviour
             horizontalDashForce += _rigidbody.velocity.x * -1;
         }
 
+        StartCoroutine(ScreenShake());
         StartCoroutine(LockHorizontalMovement(dashDuration));
         _rigidbody.AddForce(new Vector2(horizontalDashForce, 0f), ForceMode2D.Impulse);
     }
@@ -320,6 +321,26 @@ public class PlayerMovement : MonoBehaviour
         _lockHorizontalMovement = true;
         yield return new WaitForSeconds(duration);
         _lockHorizontalMovement = false;
+    }
+
+    private IEnumerator ScreenShake()
+    {
+        Cinemachine.CinemachineBasicMultiChannelPerlin virtualCameraNoise = virtualCamera.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
+
+        if (virtualCameraNoise != null)
+        {
+            virtualCameraNoise.m_AmplitudeGain = 2;
+
+            yield return new WaitForSeconds(dashDuration);
+
+            virtualCameraNoise.m_AmplitudeGain = 0;
+        }
+        else
+        {
+            yield return null;
+        }
+
+
     }
 
     private IEnumerator SetCanDoubleJumpAfterSeconds(float duration)

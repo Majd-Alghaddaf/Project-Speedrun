@@ -691,7 +691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerModelGameObject: {fileID: 1740607404906885617}
   frontGameObject: {fileID: 1412789478}
-  movementAudioSource: {fileID: 0}
+  virtualCamera: {fileID: 0}
   runningAnimationBoolName: isRunning
   moveSpeed: 8
   jumpingAnimationBoolName: isJumping
