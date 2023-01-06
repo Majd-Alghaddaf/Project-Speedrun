@@ -326,7 +326,21 @@ public class PlayerMovement : MonoBehaviour
         _canDoubleJump = true;
     }
 
-    public void SetActionsLocked(bool value) => _actionsLocked = value;
+    public void SetActionsLocked(bool value)
+
+    {
+        _actionsLocked = value;
+
+        if(_actionsLocked)
+        {
+            _rigidbody.velocity = Vector2.zero;
+            _rigidbody.bodyType = RigidbodyType2D.Static;
+        }
+        else
+        {
+            _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
 
     public void SetIsGrounded(bool value)
     {
