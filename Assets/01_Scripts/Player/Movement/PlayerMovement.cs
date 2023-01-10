@@ -332,7 +332,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (virtualCameraNoise != null)
         {
-            virtualCameraNoise.m_AmplitudeGain = 2;
+            virtualCameraNoise.m_AmplitudeGain = 5;
 
             yield return new WaitForSeconds(dashDuration);
 
