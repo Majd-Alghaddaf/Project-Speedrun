@@ -1633,7 +1633,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: speedrun project
+  m_text: project speedrun
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a8b62982fd7defb41b8e4587fefbbc29, type: 2}
   m_sharedMaterial: {fileID: -1995955312317065104, guid: a8b62982fd7defb41b8e4587fefbbc29, type: 2}

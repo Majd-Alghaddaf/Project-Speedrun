@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private string runningAnimationBoolName = "isRunning";
     [SerializeField] [Range(0f, 25f)] private float moveSpeed;
+    [SerializeField] private ParticleSystem runningParticleSystem;
     [Header("Jumping")]
     [SerializeField] private string jumpingAnimationBoolName = "isJumping";
     [Tooltip("When a player is no longer grounded, there will be a time window where they can still jump. This variable represents the duration of that time window.")]
@@ -103,12 +104,13 @@ public class PlayerMovement : MonoBehaviour
             _rigidbody.velocity = new Vector2(_horizontalInput * moveSpeed, _rigidbody.velocity.y);
         }
 
-        UpdateRunningAnimation();
+        bool isRunning = Mathf.Abs(_rigidbody.velocity.x) > Mathf.Epsilon;
+        UpdateRunningAnimation(isRunning);
+        UpdateRunningParticleSystem(isRunning);
     }
 
-    private void UpdateRunningAnimation()
+    private void UpdateRunningAnimation(bool isRunning)
     {
-        bool isRunning = Mathf.Abs(_rigidbody.velocity.x) > Mathf.Epsilon;
         _animator.SetBool(runningAnimationBoolName, isRunning);
 
         if(isRunning)
@@ -116,7 +118,22 @@ public class PlayerMovement : MonoBehaviour
             UpdateSpriteFlipRotation();
         }
     }
-    
+
+    private void UpdateRunningParticleSystem(bool isRunning)
+    {
+        if (runningParticleSystem == null) return;
+
+        if(_isGrounded && isRunning)
+        {
+            if(!runningParticleSystem.isPlaying)
+                runningParticleSystem.Play();
+            return;
+        }
+
+        runningParticleSystem.Stop();
+    }
+
+
     private void UpdateSpriteFlipRotation()
     {
         playerModelGameObject.transform.localScale = new Vector2(Mathf.Sign(_rigidbody.velocity.x), 1f);
